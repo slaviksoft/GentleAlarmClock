@@ -8,37 +8,49 @@ import java.util.Calendar;
 
 /**
  * Created by Slavik on 27.09.2015.
+ * Manager for db
  */
 public class AlarmsManager{
 
     private DbHelper db;
     private AlarmsArrayAdapter alarmsArrayAdapter;
+    private Context context;
 
     public AlarmsManager(Context context){
         db = new DbHelper(context);
         ArrayList<AlarmItem> list = db.fetchAlarmItems();
         alarmsArrayAdapter = new AlarmsArrayAdapter(context, R.layout.alarms_list_item, list);
+        alarmsArrayAdapter.setNotifyOnChange(true);
+        this.context = context;
     }
 
-
+    public AlarmItem getAlarmItem(int position){
+        return alarmsArrayAdapter.getItem(position);
+    }
 
     public AlarmsArrayAdapter getCursorAdapter() {
         return alarmsArrayAdapter;
     }
 
-    public void addAlarm(){
+    public void addAlarm(AlarmItem alarmItem){
 
         Calendar rightNow = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("hh:mm");
-        String formattedDate = df.format(rightNow.getTime());
+//        String formattedDate = df.format(rightNow.getTime());
 
-        AlarmItem item = new AlarmItem("Alarm", formattedDate, 1, 1, 1, 0, 0, 1, 1);
+        db.addAlarm(alarmItem);
 
-        db.addAlarm(item);
+        alarmsArrayAdapter.add(alarmItem);
 
-        alarmsArrayAdapter.add(item);
-        alarmsArrayAdapter.notifyDataSetChanged();
+    }
 
+    public void updateAlarm(int position, AlarmItem alarmItem){
+
+        db.updateAlarm(alarmItem);
+
+        AlarmItem oldItem = alarmsArrayAdapter.getItem(position);
+        alarmsArrayAdapter.remove(oldItem);
+        alarmsArrayAdapter.insert(alarmItem, position);
 
     }
 
@@ -48,8 +60,11 @@ public class AlarmsManager{
 
         db.deleteAlarm(item);
         alarmsArrayAdapter.remove(item);
-        alarmsArrayAdapter.notifyDataSetChanged();
 
+    }
+
+    public AlarmItem getNewAlarmItem(){
+        return new AlarmItem("New alarm", "18:00", 1, 1, 1, 1, 1, 1, 1);
     }
 
 }

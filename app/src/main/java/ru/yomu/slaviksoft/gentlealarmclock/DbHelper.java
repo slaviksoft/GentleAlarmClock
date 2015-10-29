@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Slavik on 27.09.2015.
+ * Database helper for alarm items
  */
 public class DbHelper extends SQLiteOpenHelper{
 
@@ -100,6 +101,16 @@ public class DbHelper extends SQLiteOpenHelper{
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_ALARMS, null, values);
+        db.close();
+
+    }
+
+    public void updateAlarm(AlarmItem item){
+
+        ContentValues values = item.getContent();
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TABLE_ALARMS, values, KEY_ID+"="+item.id, null);
         db.close();
 
     }

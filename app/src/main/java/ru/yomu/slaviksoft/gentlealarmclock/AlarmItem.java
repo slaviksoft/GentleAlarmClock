@@ -2,11 +2,14 @@ package ru.yomu.slaviksoft.gentlealarmclock;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Slavik on 21.10.2015.
+ * class of alarm item
  */
-public class AlarmItem {
+public class AlarmItem implements Parcelable {
 
     public long id;
     public String name;
@@ -19,8 +22,8 @@ public class AlarmItem {
     public boolean day6;
     public boolean day7;
 
-    public AlarmItem(Cursor cursor){
-        id   = cursor.getLong(cursor.getColumnIndexOrThrow(DbHelper.KEY_ID));
+    public AlarmItem(Cursor cursor) {
+        id = cursor.getLong(cursor.getColumnIndexOrThrow(DbHelper.KEY_ID));
         name = cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.KEY_NAME));
         time = cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.KEY_TIME));
         day1 = cursor.getInt(cursor.getColumnIndexOrThrow(DbHelper.KEY_WEEK_DAYS_1)) == 1;
@@ -32,7 +35,7 @@ public class AlarmItem {
         day7 = cursor.getInt(cursor.getColumnIndexOrThrow(DbHelper.KEY_WEEK_DAYS_7)) == 1;
     }
 
-    public AlarmItem(String name, String time, int day1, int day2, int day3, int day4, int day5, int day6, int day7){
+    public AlarmItem(String name, String time, int day1, int day2, int day3, int day4, int day5, int day6, int day7) {
         this.name = name;
         this.time = time;
         this.day1 = day1 == 1;
@@ -45,7 +48,32 @@ public class AlarmItem {
     }
 
 
-    public ContentValues getContent(){
+    protected AlarmItem(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        time = in.readString();
+        day1 = in.readByte() != 0;
+        day2 = in.readByte() != 0;
+        day3 = in.readByte() != 0;
+        day4 = in.readByte() != 0;
+        day5 = in.readByte() != 0;
+        day6 = in.readByte() != 0;
+        day7 = in.readByte() != 0;
+    }
+
+    public static final Creator<AlarmItem> CREATOR = new Creator<AlarmItem>() {
+        @Override
+        public AlarmItem createFromParcel(Parcel in) {
+            return new AlarmItem(in);
+        }
+
+        @Override
+        public AlarmItem[] newArray(int size) {
+            return new AlarmItem[size];
+        }
+    };
+
+    public ContentValues getContent() {
         ContentValues values = new ContentValues();
 
         values.put(DbHelper.KEY_NAME, name);
@@ -61,4 +89,24 @@ public class AlarmItem {
         return values;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(time);
+        dest.writeInt(day1 ? 1 : 0);
+        dest.writeInt(day2 ? 1 : 0);
+        dest.writeInt(day3 ? 1 : 0);
+        dest.writeInt(day4 ? 1 : 0);
+        dest.writeInt(day5 ? 1 : 0);
+        dest.writeInt(day6 ? 1 : 0);
+        dest.writeInt(day7 ? 1 : 0);
+
+    }
 }
