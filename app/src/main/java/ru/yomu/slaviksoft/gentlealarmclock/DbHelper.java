@@ -17,12 +17,12 @@ public class DbHelper extends SQLiteOpenHelper{
 
     private String TAG = getClass().getName();
 
-    private static final int VERSION = 3;
+    private static final int VERSION = 7;
     private static final String DBNAME = "alarms";
     private static final String TABLE_ALARMS = "alarms";
     static final String KEY_ID = "_id";
     static final String KEY_NAME = "name";
-    static final String KEY_TIME = "time";
+//    static final String KEY_TIME = "time";
     static final String KEY_WEEK_DAYS_1 = "day1";
     static final String KEY_WEEK_DAYS_2 = "day2";
     static final String KEY_WEEK_DAYS_3 = "day3";
@@ -30,9 +30,8 @@ public class DbHelper extends SQLiteOpenHelper{
     static final String KEY_WEEK_DAYS_5 = "day5";
     static final String KEY_WEEK_DAYS_6 = "day6";
     static final String KEY_WEEK_DAYS_7 = "day7";
-
-
-    private SQLiteDatabase writableDB;
+    static final String KEY_TIME_HOUR     = "hour";
+    static final String KEY_TIME_MINUTES  = "minutes";
 
     public DbHelper(Context context){
         super(context, DBNAME, null, VERSION);
@@ -58,7 +57,8 @@ public class DbHelper extends SQLiteOpenHelper{
         String[] Columns = new String[]{
                 KEY_ID,
                 KEY_NAME,
-                KEY_TIME,
+                KEY_TIME_HOUR,
+                KEY_TIME_MINUTES,
                 KEY_WEEK_DAYS_1,
                 KEY_WEEK_DAYS_2,
                 KEY_WEEK_DAYS_3,
@@ -128,7 +128,8 @@ public class DbHelper extends SQLiteOpenHelper{
             TABLE_ALARMS + " (" +
                 KEY_ID + " integer PRIMARY KEY autoincrement," +
                 KEY_NAME +" string, "+
-                KEY_TIME +" string, "+
+                KEY_TIME_HOUR + " integer,"+
+                KEY_TIME_MINUTES + " integer,"+
                 KEY_WEEK_DAYS_1 +" integer, "+
                 KEY_WEEK_DAYS_2 +" integer, "+
                 KEY_WEEK_DAYS_3 +" integer, "+

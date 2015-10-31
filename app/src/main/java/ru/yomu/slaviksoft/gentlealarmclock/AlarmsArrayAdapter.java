@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by Slavik on 21.10.2015.
+ * manage alarms records in list
  */
 public class AlarmsArrayAdapter extends ArrayAdapter<AlarmItem> {
 
@@ -40,8 +41,18 @@ public class AlarmsArrayAdapter extends ArrayAdapter<AlarmItem> {
         TextView tvDay6 = (TextView) convertView.findViewById(R.id.textViewDay6);
         TextView tvDay7 = (TextView) convertView.findViewById(R.id.textViewDay7);
 
+//        Calendar c = Calendar.getInstance();
+//        c.set(Calendar.HOUR_OF_DAY, item.time_hour);
+//        c.set(Calendar.MINUTE, item.time_minute);
+//
+//        java.text.DateFormat df = DateFormat.getTimeFormat(getContext());
+//        df.setCalendar(c);
+//        String strTime = df.format(c.getTime());
+
+        String strTime = AlarmItem.getTimeString(getContext(), item);
+
         tvName.setText(item.name);
-        tvTime.setText(item.time);
+        tvTime.setText(strTime);
         tvDay1.setEnabled(item.day1);
         tvDay2.setEnabled(item.day2);
         tvDay3.setEnabled(item.day3);

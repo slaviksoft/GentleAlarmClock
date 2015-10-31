@@ -2,7 +2,6 @@ package ru.yomu.slaviksoft.gentlealarmclock;
 
 import android.content.Context;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -34,8 +33,8 @@ public class AlarmsManager{
 
     public void addAlarm(AlarmItem alarmItem){
 
-        Calendar rightNow = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+//        Calendar rightNow = Calendar.getInstance();
+//        SimpleDateFormat df = new SimpleDateFormat("hh:mm");
 //        String formattedDate = df.format(rightNow.getTime());
 
         db.addAlarm(alarmItem);
@@ -64,7 +63,10 @@ public class AlarmsManager{
     }
 
     public AlarmItem getNewAlarmItem(){
-        return new AlarmItem("New alarm", "18:00", 1, 1, 1, 1, 1, 1, 1);
+
+        Calendar c = Calendar.getInstance();
+        return new AlarmItem("New alarm", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), 1, 1, 1, 1, 1, 1, 1);
+
     }
 
 }

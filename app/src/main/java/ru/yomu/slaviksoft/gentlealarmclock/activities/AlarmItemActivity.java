@@ -1,20 +1,27 @@
 package ru.yomu.slaviksoft.gentlealarmclock.activities;
 
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import ru.yomu.slaviksoft.gentlealarmclock.AlarmItem;
 import ru.yomu.slaviksoft.gentlealarmclock.R;
 
-public class AlarmItemActivity extends AppCompatActivity {
+public class AlarmItemActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
 
+    private final String TAG = getClass().getSimpleName();
     private AlarmItem alarmItem;
 
     @Override
@@ -26,13 +33,13 @@ public class AlarmItemActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         alarmItem = getIntent().getParcelableExtra("item");
-        readFromItem();
+        readDataFromItem();
 
         Button buttonOK = (Button) findViewById(R.id.buttonOK);
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeToItem();
+                writeDataToItem();
                 Intent i = getIntent().putExtra("item", alarmItem);
                 setResult(RESULT_OK, i);
                 finish();
@@ -41,7 +48,7 @@ public class AlarmItemActivity extends AppCompatActivity {
 
     }
 
-    private void readFromItem(){
+    private void readDataFromItem(){
 
         EditText editTextName = (EditText) findViewById(R.id.editTextName);
         editTextName.setText(alarmItem.name);
@@ -68,12 +75,20 @@ public class AlarmItemActivity extends AppCompatActivity {
         checkBoxDays = (CheckBox) findViewById(R.id.checkBox7);
         checkBoxDays.setChecked(alarmItem.day7);
 
-        TextView textViewTime = (TextView) findViewById(R.id.textViewTime);
-        textViewTime.setText(alarmItem.time);
+        updateViewTime();
 
     }
 
-    private void writeToItem(){
+    private void updateViewTime(){
+
+        String strTime = AlarmItem.getTimeString(getBaseContext(), alarmItem);
+
+        TextView textViewTime = (TextView) findViewById(R.id.textViewTime);
+        textViewTime.setText(strTime);
+
+    }
+
+    private void writeDataToItem(){
 
         EditText editTextName = (EditText) findViewById(R.id.editTextName);
         alarmItem.name = editTextName.getText().toString();
@@ -101,10 +116,42 @@ public class AlarmItemActivity extends AppCompatActivity {
         checkBoxDays = (CheckBox) findViewById(R.id.checkBox7);
         alarmItem.day7 = checkBoxDays.isChecked();
 
-        TextView textViewTime = (TextView) findViewById(R.id.textViewTime);
-        alarmItem.time = textViewTime.getText().toString();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        alarmItem.time_hour = hourOfDay;
+        alarmItem.time_minute = minute;
+
+        updateViewTime();
+    }
+
+    //start change time to new
+    public void onTimeClick(View v){
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("hour", alarmItem.time_hour);
+        bundle.putInt("minute", alarmItem.time_minute);
+
+        DialogFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.setArguments(bundle);
+        timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+
+    public static class TimePickerFragment extends DialogFragment{
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            int hour = getArguments().getInt("hour");
+            int minute = getArguments().getInt("minute");
+            return new TimePickerDialog(getActivity(), (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, DateFormat.is24HourFormat(getActivity()));
+        }
 
     }
+
+
 
 
 }
