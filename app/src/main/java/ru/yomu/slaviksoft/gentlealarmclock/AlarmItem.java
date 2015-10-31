@@ -9,6 +9,8 @@ import android.os.Parcelable;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+import ru.yomu.slaviksoft.gentlealarmclock.database.DbHelper;
+
 /**
  * Created by Slavik on 21.10.2015.
  * class of alarm item

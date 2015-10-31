@@ -1,4 +1,4 @@
-package ru.yomu.slaviksoft.gentlealarmclock;
+package ru.yomu.slaviksoft.gentlealarmclock.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import ru.yomu.slaviksoft.gentlealarmclock.activities.AlarmItemActivity;
+import ru.yomu.slaviksoft.gentlealarmclock.AlarmItem;
+import ru.yomu.slaviksoft.gentlealarmclock.AlarmsManager;
+import ru.yomu.slaviksoft.gentlealarmclock.R;
 
 
 public class AlarmsListActivity extends AppCompatActivity {
@@ -32,6 +34,7 @@ public class AlarmsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarms_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.setBackgroundColor(Color.BLUE);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

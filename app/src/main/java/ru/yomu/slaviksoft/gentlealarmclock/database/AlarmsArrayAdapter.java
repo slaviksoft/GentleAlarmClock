@@ -1,4 +1,4 @@
-package ru.yomu.slaviksoft.gentlealarmclock;
+package ru.yomu.slaviksoft.gentlealarmclock.database;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ru.yomu.slaviksoft.gentlealarmclock.AlarmItem;
+import ru.yomu.slaviksoft.gentlealarmclock.R;
 
 /**
  * Created by Slavik on 21.10.2015.

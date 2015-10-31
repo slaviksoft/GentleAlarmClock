@@ -1,4 +1,4 @@
-package ru.yomu.slaviksoft.gentlealarmclock;
+package ru.yomu.slaviksoft.gentlealarmclock.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import ru.yomu.slaviksoft.gentlealarmclock.AlarmItem;
 
 /**
  * Created by Slavik on 27.09.2015.
@@ -20,18 +22,18 @@ public class DbHelper extends SQLiteOpenHelper{
     private static final int VERSION = 7;
     private static final String DBNAME = "alarms";
     private static final String TABLE_ALARMS = "alarms";
-    static final String KEY_ID = "_id";
-    static final String KEY_NAME = "name";
-//    static final String KEY_TIME = "time";
-    static final String KEY_WEEK_DAYS_1 = "day1";
-    static final String KEY_WEEK_DAYS_2 = "day2";
-    static final String KEY_WEEK_DAYS_3 = "day3";
-    static final String KEY_WEEK_DAYS_4 = "day4";
-    static final String KEY_WEEK_DAYS_5 = "day5";
-    static final String KEY_WEEK_DAYS_6 = "day6";
-    static final String KEY_WEEK_DAYS_7 = "day7";
-    static final String KEY_TIME_HOUR     = "hour";
-    static final String KEY_TIME_MINUTES  = "minutes";
+
+    public static final String KEY_ID = "_id";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_WEEK_DAYS_1 = "day1";
+    public static final String KEY_WEEK_DAYS_2 = "day2";
+    public static final String KEY_WEEK_DAYS_3 = "day3";
+    public static final String KEY_WEEK_DAYS_4 = "day4";
+    public static final String KEY_WEEK_DAYS_5 = "day5";
+    public static final String KEY_WEEK_DAYS_6 = "day6";
+    public static final String KEY_WEEK_DAYS_7 = "day7";
+    public static final String KEY_TIME_HOUR     = "hour";
+    public static final String KEY_TIME_MINUTES  = "minutes";
 
     public DbHelper(Context context){
         super(context, DBNAME, null, VERSION);

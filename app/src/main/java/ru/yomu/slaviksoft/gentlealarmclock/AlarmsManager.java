@@ -5,6 +5,9 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import ru.yomu.slaviksoft.gentlealarmclock.database.AlarmsArrayAdapter;
+import ru.yomu.slaviksoft.gentlealarmclock.database.DbHelper;
+
 /**
  * Created by Slavik on 27.09.2015.
  * Manager for db

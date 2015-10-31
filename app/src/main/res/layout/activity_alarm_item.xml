@@ -12,6 +12,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/primaryColor"
+
             />
 
 
@@ -40,46 +42,61 @@
             android:layout_height="match_parent">
 
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Mo"
-                android:id="@+id/checkBox1" />
+                android:id="@+id/checkBox1"
+                android:textSize="4pt"
+                android:elegantTextHeight="false"
+                android:longClickable="false"
+                android:nestedScrollingEnabled="false"
+                android:singleLine="false"
+                android:layout_weight="10" />
 
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Tu"
-                android:id="@+id/checkBox2" />
+                android:id="@+id/checkBox2"
+                android:textSize="4pt"
+                android:layout_weight="10" />
 
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Wd"
-                android:id="@+id/checkBox3" />
-
+                android:id="@+id/checkBox3"
+                android:textSize="4pt"
+                android:layout_weight="10" />
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Th"
-                android:id="@+id/checkBox4" />
+                android:id="@+id/checkBox4" android:textSize="4pt"
+                android:layout_weight="10" />
 
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Fr"
-                android:id="@+id/checkBox5" />
+                android:id="@+id/checkBox5" android:textSize="4pt"
+                android:layout_weight="10" />
 
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Sa"
-                android:id="@+id/checkBox6" />
+                android:id="@+id/checkBox6" android:textSize="4pt"
+                android:layout_weight="10" />
 
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Su"
-                android:id="@+id/checkBox7" />
+                android:id="@+id/checkBox7" android:textSize="4pt"
+                android:layout_weight="10" />
+
+
         </LinearLayout>
 
     </LinearLayout>
@@ -91,7 +108,9 @@
         android:id="@+id/buttonOK"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -104,7 +123,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/buttonOK"
         android:layout_alignEnd="@+id/buttonOK"
+        android:padding="10dp"
+        android:gravity="center"
         android:onClick="onTimeClick"/>
+
+
 
 
 </RelativeLayout>
