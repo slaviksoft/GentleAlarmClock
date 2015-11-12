@@ -4,9 +4,11 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import ru.yomu.slaviksoft.gentlealarmclock.database.AlarmsArrayAdapter;
 import ru.yomu.slaviksoft.gentlealarmclock.database.DbHelper;
+import ru.yomu.slaviksoft.gentlealarmclock.services.AlarmsServiceManager;
 
 /**
  * Created by Slavik on 27.09.2015.
@@ -16,6 +18,7 @@ public class AlarmsManager{
 
     private DbHelper db;
     private AlarmsArrayAdapter alarmsArrayAdapter;
+    private AlarmsServiceManager alarmsServiceManager;
     private Context context;
 
     public AlarmsManager(Context context){
@@ -24,6 +27,8 @@ public class AlarmsManager{
         alarmsArrayAdapter = new AlarmsArrayAdapter(context, R.layout.alarms_list_item, list);
         alarmsArrayAdapter.setNotifyOnChange(true);
         this.context = context;
+
+        alarmsServiceManager = new AlarmsServiceManager(context);
     }
 
     public AlarmItem getAlarmItem(int position){
@@ -36,13 +41,9 @@ public class AlarmsManager{
 
     public void addAlarm(AlarmItem alarmItem){
 
-//        Calendar rightNow = Calendar.getInstance();
-//        SimpleDateFormat df = new SimpleDateFormat("hh:mm");
-//        String formattedDate = df.format(rightNow.getTime());
-
         db.addAlarm(alarmItem);
-
         alarmsArrayAdapter.add(alarmItem);
+        alarmsServiceManager.add(alarmItem);
 
     }
 
@@ -54,6 +55,8 @@ public class AlarmsManager{
         alarmsArrayAdapter.remove(oldItem);
         alarmsArrayAdapter.insert(alarmItem, position);
 
+        alarmsServiceManager.update(alarmItem);
+
     }
 
     public void deleteAlarm(int position){
@@ -61,7 +64,10 @@ public class AlarmsManager{
         AlarmItem item = alarmsArrayAdapter.getItem(position);
 
         db.deleteAlarm(item);
+
         alarmsArrayAdapter.remove(item);
+
+        alarmsServiceManager.closeAlarm(item);
 
     }
 
@@ -70,6 +76,17 @@ public class AlarmsManager{
         Calendar c = Calendar.getInstance();
         return new AlarmItem("New alarm", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), 1, 1, 1, 1, 1, 1, 1);
 
+    }
+
+    public List<AlarmItem> fetchAlarmsItems(){
+
+        return db.fetchAlarmItems();
+
+    }
+
+    public AlarmItem getAlarm(int id){
+
+        return db.getAlarm(id);
     }
 
 }

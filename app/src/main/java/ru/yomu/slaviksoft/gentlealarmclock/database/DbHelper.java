@@ -35,6 +35,20 @@ public class DbHelper extends SQLiteOpenHelper{
     public static final String KEY_TIME_HOUR     = "hour";
     public static final String KEY_TIME_MINUTES  = "minutes";
 
+    private String[] Columns = new String[]{
+            KEY_ID,
+            KEY_NAME,
+            KEY_TIME_HOUR,
+            KEY_TIME_MINUTES,
+            KEY_WEEK_DAYS_1,
+            KEY_WEEK_DAYS_2,
+            KEY_WEEK_DAYS_3,
+            KEY_WEEK_DAYS_4,
+            KEY_WEEK_DAYS_5,
+            KEY_WEEK_DAYS_6,
+            KEY_WEEK_DAYS_7
+    };
+
     public DbHelper(Context context){
         super(context, DBNAME, null, VERSION);
     }
@@ -56,20 +70,6 @@ public class DbHelper extends SQLiteOpenHelper{
 
         SQLiteDatabase db = getReadableDatabase();
 
-        String[] Columns = new String[]{
-                KEY_ID,
-                KEY_NAME,
-                KEY_TIME_HOUR,
-                KEY_TIME_MINUTES,
-                KEY_WEEK_DAYS_1,
-                KEY_WEEK_DAYS_2,
-                KEY_WEEK_DAYS_3,
-                KEY_WEEK_DAYS_4,
-                KEY_WEEK_DAYS_5,
-                KEY_WEEK_DAYS_6,
-                KEY_WEEK_DAYS_7
-        };
-
         Cursor cursor = db.query(TABLE_ALARMS, Columns, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -78,6 +78,19 @@ public class DbHelper extends SQLiteOpenHelper{
         return cursor;
     }
 
+    public AlarmItem getAlarm(int id){
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_ALARMS, Columns, KEY_ID + "=" + id, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        db.close();
+
+        return new AlarmItem(cursor);
+
+    }
 
     public ArrayList<AlarmItem> fetchAlarmItems(){
 

@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import ru.yomu.slaviksoft.gentlealarmclock.database.DbHelper;
@@ -82,6 +83,10 @@ public class AlarmItem implements Parcelable {
         }
     };
 
+    public int getId() {
+        return (int) id;
+    }
+
     public ContentValues getContent() {
         ContentValues values = new ContentValues();
 
@@ -122,11 +127,6 @@ public class AlarmItem implements Parcelable {
     }
 
     public static String getTimeString(Context context, AlarmItem item){
-
-//        Date date = new Date(0);
-//        DateFormat dateFormat = android.text.format.DateFormat.getTimeFormat()
-//        mTimeText.setText("Time: " + dateFormat.format(date));
-
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, item.time_hour);
         c.set(Calendar.MINUTE, item.time_minute);
@@ -135,7 +135,77 @@ public class AlarmItem implements Parcelable {
 
     }
 
+    public Calendar getNextCalendar(){
 
+        boolean[] days = new boolean[7];
+        days[0] = day7; //su
+        days[1] = day1; //mo
+        days[2] = day2; //tu
+        days[3] = day3; //wed
+        days[4] = day4; //th
+        days[5] = day5; //fr
+        days[6] = day6; //sa
 
+        DateFormat df = SimpleDateFormat.getInstance();
+
+        Calendar now = Calendar.getInstance();
+        int nowDayOfWeek = now.get(Calendar.DAY_OF_WEEK);
+        int nowHour = now.get(Calendar.HOUR_OF_DAY);
+        int nowMinute = now.get(Calendar.MINUTE);
+
+        Calendar next = Calendar.getInstance();
+        next.set(Calendar.HOUR_OF_DAY, time_hour);
+        next.set(Calendar.MINUTE, time_minute);
+        next.set(Calendar.SECOND, 0);
+
+        boolean calendarSet = false;
+
+        if (day1 || day2 || day3 || day4 || day5 || day6 || day7){
+
+            for (int day=Calendar.SUNDAY; day <= Calendar.SATURDAY; day++){
+                if (
+                        days[day-1] &&
+                                (
+                                        (day > nowDayOfWeek)
+                                                ||
+                                                (day == nowDayOfWeek && nowHour < time_hour)
+                                                ||
+                                                (day == nowDayOfWeek && nowHour == time_hour && nowMinute < time_minute)
+                                )
+                        )
+                {
+                    next.set(Calendar.DAY_OF_WEEK, day);
+                    calendarSet = true;
+                    break;
+                }
+            }
+
+            if(!calendarSet){
+                for (int day=Calendar.SUNDAY; day <= Calendar.SATURDAY; day++){
+                    if(days[day-1] && day <= nowDayOfWeek){
+                        next.set(Calendar.DAY_OF_WEEK, day);
+                        next.add(Calendar.WEEK_OF_YEAR, 1);
+                        calendarSet = true;
+                        break;
+                    }
+                }
+            }
+
+        }else{
+            if(
+                    (nowHour < time_hour) ||
+                            ( time_hour == nowHour && nowMinute < time_minute)
+                    )
+            {
+                calendarSet = true;
+            }
+        }
+
+        if(calendarSet)
+            return next;
+        else
+            return null;
+
+    }
 
 }
