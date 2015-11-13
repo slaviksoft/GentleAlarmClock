@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class AlarmsArrayAdapter extends ArrayAdapter<AlarmItem> {
 
         AlarmItem item = getItem(position);
 
+        CheckBox cbEnabled = (CheckBox) convertView.findViewById(R.id.checkBoxEnabled);
         TextView tvName = (TextView) convertView.findViewById(R.id.textViewAlarmName);
         TextView tvTime = (TextView) convertView.findViewById(R.id.textViewAlarmTime);
         TextView tvDay1 = (TextView) convertView.findViewById(R.id.textViewDay1);
@@ -44,16 +46,9 @@ public class AlarmsArrayAdapter extends ArrayAdapter<AlarmItem> {
         TextView tvDay6 = (TextView) convertView.findViewById(R.id.textViewDay6);
         TextView tvDay7 = (TextView) convertView.findViewById(R.id.textViewDay7);
 
-//        Calendar c = Calendar.getInstance();
-//        c.set(Calendar.HOUR_OF_DAY, item.time_hour);
-//        c.set(Calendar.MINUTE, item.time_minute);
-//
-//        java.text.DateFormat df = DateFormat.getTimeFormat(getContext());
-//        df.setCalendar(c);
-//        String strTime = df.format(c.getTime());
-
         String strTime = AlarmItem.getTimeString(getContext(), item);
 
+        cbEnabled.setChecked(item.enabled);
         tvName.setText(item.name);
         tvTime.setText(strTime);
         tvDay1.setEnabled(item.day1);

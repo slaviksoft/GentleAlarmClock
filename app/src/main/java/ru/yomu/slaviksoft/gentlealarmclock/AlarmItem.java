@@ -20,6 +20,7 @@ public class AlarmItem implements Parcelable {
 
     public long id;
     public String name;
+    public boolean enabled;
     public int time_hour;
     public int time_minute;
     public boolean day1;
@@ -32,6 +33,7 @@ public class AlarmItem implements Parcelable {
 
     public AlarmItem(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(DbHelper.KEY_ID));
+        enabled = cursor.getInt(cursor.getColumnIndexOrThrow(DbHelper.KEY_ENABLED)) == 1;
         name = cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.KEY_NAME));
         time_hour = cursor.getInt(cursor.getColumnIndexOrThrow(DbHelper.KEY_TIME_HOUR));
         time_minute = cursor.getInt(cursor.getColumnIndexOrThrow(DbHelper.KEY_TIME_MINUTES));
@@ -44,8 +46,9 @@ public class AlarmItem implements Parcelable {
         day7 = cursor.getInt(cursor.getColumnIndexOrThrow(DbHelper.KEY_WEEK_DAYS_7)) == 1;
     }
 
-    public AlarmItem(String name, int time_hour, int time_minutes, int day1, int day2, int day3, int day4, int day5, int day6, int day7) {
+    public AlarmItem(String name, int enabled, int time_hour, int time_minutes, int day1, int day2, int day3, int day4, int day5, int day6, int day7) {
         this.name = name;
+        this.enabled = enabled == 1;
         this.time_hour = time_hour;
         this.time_minute = time_minutes;
         this.day1 = day1 == 1;
@@ -59,6 +62,7 @@ public class AlarmItem implements Parcelable {
 
     protected AlarmItem(Parcel in) {
         id = in.readLong();
+        enabled = in.readByte() != 0;
         name = in.readString();
         time_hour = in.readInt();
         time_minute = in.readInt();
@@ -90,6 +94,7 @@ public class AlarmItem implements Parcelable {
     public ContentValues getContent() {
         ContentValues values = new ContentValues();
 
+        values.put(DbHelper.KEY_ENABLED, enabled);
         values.put(DbHelper.KEY_NAME, name);
         values.put(DbHelper.KEY_TIME_HOUR, time_hour);
         values.put(DbHelper.KEY_TIME_MINUTES, time_minute);
@@ -113,6 +118,7 @@ public class AlarmItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeLong(id);
+        dest.writeInt(enabled ? 1 : 0);
         dest.writeString(name);
         dest.writeInt(time_hour);
         dest.writeInt(time_minute);
@@ -135,7 +141,13 @@ public class AlarmItem implements Parcelable {
 
     }
 
+    public boolean isRepeated(){
+        return day1 || day2 || day3 || day4 || day5 || day6 || day7;
+    }
+
     public Calendar getNextCalendar(){
+
+        if (!enabled) return null;
 
         boolean[] days = new boolean[7];
         days[0] = day7; //su
@@ -160,7 +172,7 @@ public class AlarmItem implements Parcelable {
 
         boolean calendarSet = false;
 
-        if (day1 || day2 || day3 || day4 || day5 || day6 || day7){
+        if (isRepeated()){
 
             for (int day=Calendar.SUNDAY; day <= Calendar.SATURDAY; day++){
                 if (

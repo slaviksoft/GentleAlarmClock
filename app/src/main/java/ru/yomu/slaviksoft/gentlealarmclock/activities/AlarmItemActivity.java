@@ -24,6 +24,20 @@ public class AlarmItemActivity extends AppCompatActivity implements TimePickerDi
     private final String TAG = getClass().getSimpleName();
     private AlarmItem alarmItem;
 
+    private CheckBox checkBoxEnabled;
+    private EditText editTextName;
+
+    private CheckBox checkBoxDay1;
+    private CheckBox checkBoxDay2;
+    private CheckBox checkBoxDay3;
+    private CheckBox checkBoxDay4;
+    private CheckBox checkBoxDay5;
+    private CheckBox checkBoxDay6;
+    private CheckBox checkBoxDay7;
+
+    private TextView textViewTime;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +47,18 @@ public class AlarmItemActivity extends AppCompatActivity implements TimePickerDi
         setSupportActionBar(toolbar);
 
         alarmItem = getIntent().getParcelableExtra("item");
+
+        checkBoxEnabled = (CheckBox) findViewById(R.id.checkBoxEnabled);
+        editTextName = (EditText) findViewById(R.id.editTextName);
+        checkBoxDay1 = (CheckBox) findViewById(R.id.checkBox1);
+        checkBoxDay2 = (CheckBox) findViewById(R.id.checkBox2);
+        checkBoxDay3 = (CheckBox) findViewById(R.id.checkBox3);
+        checkBoxDay4 = (CheckBox) findViewById(R.id.checkBox4);
+        checkBoxDay5 = (CheckBox) findViewById(R.id.checkBox5);
+        checkBoxDay6 = (CheckBox) findViewById(R.id.checkBox6);
+        checkBoxDay7 = (CheckBox) findViewById(R.id.checkBox7);
+        textViewTime = (TextView) findViewById(R.id.textViewTime);
+
         readDataFromItem();
 
         Button buttonOK = (Button) findViewById(R.id.buttonOK);
@@ -46,34 +72,33 @@ public class AlarmItemActivity extends AppCompatActivity implements TimePickerDi
             }
         });
 
+        TextView textViewTime = (TextView) findViewById(R.id.textViewTime);
+        textViewTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("hour", alarmItem.time_hour);
+                bundle.putInt("minute", alarmItem.time_minute);
+
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setArguments(bundle);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+            }
+        });
+
     }
 
     private void readDataFromItem(){
 
-        EditText editTextName = (EditText) findViewById(R.id.editTextName);
+        checkBoxEnabled.setChecked(alarmItem.enabled);
         editTextName.setText(alarmItem.name);
-
-        CheckBox checkBoxDays;
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox1);
-        checkBoxDays.setChecked(alarmItem.day1);
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox2);
-        checkBoxDays.setChecked(alarmItem.day2);
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox3);
-        checkBoxDays.setChecked(alarmItem.day3);
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox4);
-        checkBoxDays.setChecked(alarmItem.day4);
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox5);
-        checkBoxDays.setChecked(alarmItem.day5);
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox6);
-        checkBoxDays.setChecked(alarmItem.day6);
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox7);
-        checkBoxDays.setChecked(alarmItem.day7);
+        checkBoxDay1.setChecked(alarmItem.day1);
+        checkBoxDay2.setChecked(alarmItem.day2);
+        checkBoxDay3.setChecked(alarmItem.day3);
+        checkBoxDay4.setChecked(alarmItem.day4);
+        checkBoxDay5.setChecked(alarmItem.day5);
+        checkBoxDay6.setChecked(alarmItem.day6);
+        checkBoxDay7.setChecked(alarmItem.day7);
 
         updateViewTime();
 
@@ -82,40 +107,21 @@ public class AlarmItemActivity extends AppCompatActivity implements TimePickerDi
     private void updateViewTime(){
 
         String strTime = AlarmItem.getTimeString(getBaseContext(), alarmItem);
-
-        TextView textViewTime = (TextView) findViewById(R.id.textViewTime);
         textViewTime.setText(strTime);
 
     }
 
     private void writeDataToItem(){
 
-        EditText editTextName = (EditText) findViewById(R.id.editTextName);
         alarmItem.name = editTextName.getText().toString();
-
-        CheckBox checkBoxDays;
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox1);
-        alarmItem.day1 = checkBoxDays.isChecked();
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox2);
-        alarmItem.day2 = checkBoxDays.isChecked();
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox3);
-        alarmItem.day3 = checkBoxDays.isChecked();
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox4);
-        alarmItem.day4 = checkBoxDays.isChecked();
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox5);
-        alarmItem.day5 = checkBoxDays.isChecked();
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox6);
-        alarmItem.day6 = checkBoxDays.isChecked();
-
-        checkBoxDays = (CheckBox) findViewById(R.id.checkBox7);
-        alarmItem.day7 = checkBoxDays.isChecked();
-
+        alarmItem.enabled = checkBoxEnabled.isChecked();
+        alarmItem.day1 = checkBoxDay1.isChecked();
+        alarmItem.day2 = checkBoxDay2.isChecked();
+        alarmItem.day3 = checkBoxDay3.isChecked();
+        alarmItem.day4 = checkBoxDay4.isChecked();
+        alarmItem.day5 = checkBoxDay5.isChecked();
+        alarmItem.day6 = checkBoxDay6.isChecked();
+        alarmItem.day7 = checkBoxDay7.isChecked();
     }
 
     @Override
@@ -125,19 +131,6 @@ public class AlarmItemActivity extends AppCompatActivity implements TimePickerDi
 
         updateViewTime();
     }
-
-    //start change time to new
-    public void onTimeClick(View v){
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("hour", alarmItem.time_hour);
-        bundle.putInt("minute", alarmItem.time_minute);
-
-        DialogFragment timePickerFragment = new TimePickerFragment();
-        timePickerFragment.setArguments(bundle);
-        timePickerFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
 
     public static class TimePickerFragment extends DialogFragment{
 

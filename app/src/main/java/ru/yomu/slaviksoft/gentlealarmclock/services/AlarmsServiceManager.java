@@ -25,50 +25,28 @@ public class AlarmsServiceManager {
         this.context = context;
     }
 
-
-//    @TargetApi(Build.VERSION_CODES.KITKAT)
-//    public void addDefferedAlarm(){
-//
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(System.currentTimeMillis());
-//
-//        Intent i = new Intent(context, cls);
-//        i.putExtra("START", calendar.getTime().toString());
-//        i.putExtra("INFO", "deffered alarm");
-//
-//        calendar.add(Calendar.SECOND, 1);
-//
-//        PendingIntent pendingIntent = getPendingIntent(ID, i);
-//        AlarmManager alarmManager = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
-//
-//        if (Build.VERSION_CODES.LOLLIPOP == Build.VERSION.SDK_INT){
-//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-//            Log.d("alert-helper", "setExact");}
-//        else{
-//            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-//            Log.d("alert-helper", "set");}
-//
-//    }
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void addAlarm(Calendar next, AlarmItem alarm){
 
-        if (next == null) return;
+        if (next == null) {
+            closeAlarm(alarm);
+            return;
+        }
 
-            Intent i = new Intent(context, cls);
-            i.putExtra("START", next.getTime().toString());
-            i.putExtra("INFO", alarm.name);
-            i.putExtra("ALARM", alarm);
+        Intent i = new Intent(context, cls);
+        i.putExtra("START", next.getTime().toString());
+        i.putExtra("INFO", alarm.name);
+        i.putExtra("ALARM", alarm);
 
-            PendingIntent pendingIntent = getPendingIntent(alarm.getId(), i);
-            AlarmManager alarmManager = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
+        PendingIntent pendingIntent = getPendingIntent(alarm.getId(), i);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(context.ALARM_SERVICE);
 
-            if (Build.VERSION_CODES.LOLLIPOP == Build.VERSION.SDK_INT){
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pendingIntent);
-                }
-            else{
-                alarmManager.set(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pendingIntent);
-                }
+        if (Build.VERSION_CODES.LOLLIPOP == Build.VERSION.SDK_INT){
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pendingIntent);
+            }
+        else{
+            alarmManager.set(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pendingIntent);
+            }
         Log.d("DEBUG", "set "+alarm.name+" = "+next.getTime());
     }
 

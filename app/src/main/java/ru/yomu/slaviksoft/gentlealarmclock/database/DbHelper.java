@@ -19,12 +19,13 @@ public class DbHelper extends SQLiteOpenHelper{
 
     private String TAG = getClass().getName();
 
-    private static final int VERSION = 7;
+    private static final int VERSION = 8;
     private static final String DBNAME = "alarms";
     private static final String TABLE_ALARMS = "alarms";
 
     public static final String KEY_ID = "_id";
     public static final String KEY_NAME = "name";
+    public static final String KEY_ENABLED = "enabled";
     public static final String KEY_WEEK_DAYS_1 = "day1";
     public static final String KEY_WEEK_DAYS_2 = "day2";
     public static final String KEY_WEEK_DAYS_3 = "day3";
@@ -38,6 +39,7 @@ public class DbHelper extends SQLiteOpenHelper{
     private String[] Columns = new String[]{
             KEY_ID,
             KEY_NAME,
+            KEY_ENABLED,
             KEY_TIME_HOUR,
             KEY_TIME_MINUTES,
             KEY_WEEK_DAYS_1,
@@ -76,20 +78,6 @@ public class DbHelper extends SQLiteOpenHelper{
         }
         db.close();
         return cursor;
-    }
-
-    public AlarmItem getAlarm(int id){
-
-        SQLiteDatabase db = getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_ALARMS, Columns, KEY_ID + "=" + id, null, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        db.close();
-
-        return new AlarmItem(cursor);
-
     }
 
     public ArrayList<AlarmItem> fetchAlarmItems(){
@@ -142,6 +130,7 @@ public class DbHelper extends SQLiteOpenHelper{
             "CREATE TABLE if not exists " +
             TABLE_ALARMS + " (" +
                 KEY_ID + " integer PRIMARY KEY autoincrement," +
+                KEY_ENABLED +" integer, "+
                 KEY_NAME +" string, "+
                 KEY_TIME_HOUR + " integer,"+
                 KEY_TIME_MINUTES + " integer,"+

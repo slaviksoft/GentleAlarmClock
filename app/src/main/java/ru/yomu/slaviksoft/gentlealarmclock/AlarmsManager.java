@@ -47,9 +47,13 @@ public class AlarmsManager{
 
     }
 
+    public void updateAlarm(AlarmItem alarmItem){
+        db.updateAlarm(alarmItem);
+    }
+
     public void updateAlarm(int position, AlarmItem alarmItem){
 
-        db.updateAlarm(alarmItem);
+        updateAlarm(alarmItem);
 
         AlarmItem oldItem = alarmsArrayAdapter.getItem(position);
         alarmsArrayAdapter.remove(oldItem);
@@ -74,7 +78,8 @@ public class AlarmsManager{
     public AlarmItem getNewAlarmItem(){
 
         Calendar c = Calendar.getInstance();
-        return new AlarmItem("New alarm", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), 1, 1, 1, 1, 1, 1, 1);
+        c.add(Calendar.MINUTE, 1);
+        return new AlarmItem("New alarm ", 1, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), 1, 1, 1, 1, 1, 1, 1);
 
     }
 
@@ -84,9 +89,6 @@ public class AlarmsManager{
 
     }
 
-    public AlarmItem getAlarm(int id){
 
-        return db.getAlarm(id);
-    }
 
 }

@@ -3,7 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:paddingTop="@dimen/list_spliter_padding"
+    android:paddingBottom="@dimen/list_spliter_padding"
+    >
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxEnabled"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:enabled="false"/>
 
     <LinearLayout
         android:layout_width="0dp"
